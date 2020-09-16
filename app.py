@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory, send_file
 import os
 import cv2
 import numpy as np
@@ -12,7 +12,7 @@ app.config['UPLOAD_PATH'] = 'uploads'
 
 @app.route('/')
 def index():
-    files = os.listdir(app.config['UPLOAD_PATH'])
+    #files = os.listdir(app.config['UPLOAD_PATH'])
     return render_template('index.html')
 
 @app.route('/', methods=['POST'])
@@ -35,7 +35,13 @@ def result():
 
 @app.route('/uploads/<filename>')
 def upload(filename):
-    return send_from_directory(app.config['UPLOAD_PATH'], filename)
+    return send_from_directory(app.config['UPLOAD_PATH'], filename, as_attachment=True)
+
+@app.route('/downloads/<filename>')
+def download(filename):
+    print('MY HEAD')
+    print(os.path.join(app.config['UPLOAD_PATH'],filename))
+    return send_file(os.path.join(app.config['UPLOAD_PATH'],filename), filename, as_attachment=True)
 
 def detector(img_path):
     print(img_path)
@@ -100,7 +106,7 @@ def detector(img_path):
                         tempx=x
                         tempy=y
                         #cv2.circle(imgcolor, (x,y), r, color=(255,255,0), thickness = 2)
-                        crop_img = imgcolor[y-r-1:y+r, x-r-1:x+r]
+                        crop_img = imgcolor[y-r:y+r+1, x-r:x+r+1]
                         path = './uploads'
                         cv2.imwrite(os.path.join(path, 'cropped' + str(x) + 'by' + str(y) + '.jpg'), crop_img)
                         circles.append((x,y,r))
