@@ -1,0 +1,54 @@
+h1 {
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+}
+
+p {
+  margin-left: 20%;
+  margin-right: 20%;
+  font-size: larger;
+  text-align: center;
+}
+
+body {
+  background-color: pink;
+}
+
+input[type=submit] {
+    height: 50px;
+    width: 50px;
+    background:#00db0f;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+input[type=submit]:hover {
+    height: 50px;
+    width: 50px;
+    background:#00990a;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+div.choose {
+  background-color: white;
+  height: 50px;
+  padding:5px 5px;
+  margin-left: 10%;
+  margin-right: 10%;
+  border-radius: 10px;
+}
+
+div#submit {
+  float: bottom;
+  text-align: center;
+}

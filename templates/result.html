@@ -2,9 +2,10 @@
 <html>
   <head>
     <title>Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   </head>
   <body>
-    <h1>Choose the Correct Image to Download</h1>
+    <h1>Circle Detecting and Cropping Tool</h1>
     {% for file in files %}
       <a href="{{ url_for('download', filename=file)}}">
       <img src="{{ url_for('upload', filename=file) }}">

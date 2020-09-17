@@ -1,14 +1,62 @@
 <!doctype html>
 <html>
   <head>
-    <title>File Upload</title>
+    <title>Circle Detecting and Cropping Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   </head>
   <body>
-    <h1>File Upload</h1>
+    <h1>Circle Detecting and Cropping Tool</h1>
     <form method="POST" action="" enctype="multipart/form-data">
-      <p><input type="file" name="file"></p>
-      <p><input type="submit" value="Submit"></p>
+      <div class="choose">
+          <div id="choosefile">
+            <input type="file" name="file">
+          </div>
+          <div id="choosefile">
+            <input type="file" name="file">
+          </div>
+          <div id="submit">
+            <input type="submit" value="Submit">
+          </div>
+
+      </div>
+
     </form>
+
+    <button onclick="changeTab()">Click Me</button>
+
+    <script src="{{url_for('static', filename='js/changeTab.js') }}"></script>
+
     <hr>
+    <h2>What does this website do?</h2>
+    <p>
+      This website is a tool to automatically crop an uploaded image
+      to cover only circle(s) detected in the image. For example, if you
+      didn't want to go through the process of cropping an image of a
+      vinyl record to show only the label, this website can do it for you!
+    </p>
+    <br>
+    <h2>How do I use it?</h2>
+    <p>
+      Simply start by clicking the 'Choose file' button. After choosing an image
+      from the window that appears, press the 'Submit' button. The website
+      will then run some calculations to determine where the circles are.
+      You will then be taken to a new page which shows the results of the detection
+      and cropping. You can then download the cropped image(s) by clicking on them.
+      Bare in mind <em><strong>this detector isn't perfect!!</strong></em> Whilst it is very good at
+      finding a correct result, there may be other 'circles' that the detector finds
+      that aren't in line with your desired outcome, which is why it is up to you
+      to download the one that suits you best.
+    </p>
+    <br>
+    <h2>How does it work?</h2>
+    <p>
+      The circle detector uses a <a href="https://en.wikipedia.org/wiki/Circle_Hough_Transform">
+      Hough Circle Transform</a> to detect circles in images. Concisely, this is achieved
+      by scanning an edge map of the input image, pixel by pixel, and generating a 2D
+      Hough Space to formalise how likely each point in the image is the centre of a circle
+      in the image.
+    </p>
+
+
   </body>
 </html>
