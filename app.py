@@ -3,6 +3,7 @@ import os
 import cv2
 import numpy as np
 import math
+import urllib.request
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -15,7 +16,7 @@ def index():
     #files = os.listdir(app.config['UPLOAD_PATH'])
     return render_template('index.html')
 
-@app.route('/', methods=['POST'])
+@app.route('/uploadfile', methods=['POST'])
 def upload_files():
     uploaded_file = request.files['file']
     filename = secure_filename(uploaded_file.filename)
@@ -26,6 +27,27 @@ def upload_files():
         filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
         uploaded_file.save(filepath)
         detector(filepath)
+    return redirect(url_for('result'))
+
+@app.route('/uploadfromurl', methods=['POST'])
+def upload_from_url():
+    print('TESTINGTON MUTHAFUCKA')
+
+    uploaded_url = request.form['url']
+    print(uploaded_url)
+    path = 'uploads/' + uploaded_url.split('/')[-1]
+    print(path)
+    uploaded_file, headers = urllib.request.urlretrieve(uploaded_url, path)
+    print(uploaded_file)
+    filename = secure_filename(uploaded_file)
+    if filename != '':
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+            abort(400)
+        filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
+        print('AOSIDJOASIDJ' + filepath)
+        detector(uploaded_file)
+
     return redirect(url_for('result'))
 
 @app.route('/result')
@@ -43,9 +65,12 @@ def download(filename):
     print(os.path.join(app.config['UPLOAD_PATH'],filename))
     return send_file(os.path.join(app.config['UPLOAD_PATH'],filename), filename, as_attachment=True)
 
+#------------------------------------------------------------
+
 def detector(img_path):
-    print(img_path)
+    print('YOUR HEAD' + img_path)
     imgcolor = cv2.imread(img_path)
+    #print('YOUR HEAD after imread' + imgcolor)
     img = cv2.cvtColor(imgcolor, cv2.COLOR_BGR2GRAY)
     #cv2.imwrite("test.jpg", img)
     img = cv2.equalizeHist(img)

@@ -6,13 +6,27 @@
   </head>
   <body>
     <h1>Circle Detecting and Cropping Tool</h1>
-    <form method="POST" action="" enctype="multipart/form-data">
+    <form method="POST" action="/uploadfile" enctype="multipart/form-data">
       <div class="choose">
           <div id="choosefile">
             <input type="file" name="file">
           </div>
-          <div id="choosefile">
+          <!-- <div id="choosefile">
             <input type="file" name="file">
+          </div> -->
+          <div id="submit">
+            <input type="submit" value="Submit">
+          </div>
+
+      </div>
+
+    </form>
+
+    <form method="POST" action="/uploadfromurl" enctype="multipart/form-data">
+      <div class="choose">
+          <div id="choosefile">
+            <label for="url">Image URL:</label><br>
+            <input type="text" id="url" name="url"><br>
           </div>
           <div id="submit">
             <input type="submit" value="Submit">
