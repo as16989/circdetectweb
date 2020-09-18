@@ -1,15 +1,32 @@
-from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory, send_file
+from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory, send_file, jsonify
 import os
 import cv2
 import numpy as np
 import math
 import urllib.request
+# import eel
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'uploads'
+
+# eel.init('templates')
+
+@app.route('/hello', methods=['GET', 'POST'])
+def hello():
+
+    # POST request
+    if request.method == 'POST':
+        print('Incoming..')
+        print(request.get_json())  # parse as JSON
+        return 'OK', 200
+
+    # GET request
+    else:
+        message = {'greeting':'OI, OSE THAT'}
+        return jsonify(message)  # serialize and use JSON headers
 
 @app.route('/')
 def index():
@@ -26,29 +43,26 @@ def upload_files():
             abort(400)
         filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
         uploaded_file.save(filepath)
-        detector(filepath)
-    return redirect(url_for('result'))
+        if (detector(filepath)):
+            return redirect(url_for('result'))
+        else:
+            return redirect(url_for('index'))
 
 @app.route('/uploadfromurl', methods=['POST'])
 def upload_from_url():
-    print('TESTINGTON MUTHAFUCKA')
-
     uploaded_url = request.form['url']
-    print(uploaded_url)
-    path = 'uploads/' + uploaded_url.split('/')[-1]
-    print(path)
-    uploaded_file, headers = urllib.request.urlretrieve(uploaded_url, path)
-    print(uploaded_file)
-    filename = secure_filename(uploaded_file)
+    uploaded_splitted = uploaded_url.split('/')[-1]
+    path = 'uploads/' + uploaded_splitted
+    filename = secure_filename(uploaded_splitted)
     if filename != '':
         file_ext = os.path.splitext(filename)[1]
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             abort(400)
-        filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
-        print('AOSIDJOASIDJ' + filepath)
-        detector(uploaded_file)
-
-    return redirect(url_for('result'))
+        uploaded_file, headers = urllib.request.urlretrieve(uploaded_url, path)
+        if (detector(uploaded_file)):
+            return redirect(url_for('result'))
+        else:
+            return redirect(url_for('index'))
 
 @app.route('/result')
 def result():
@@ -69,6 +83,8 @@ def download(filename):
 
 def detector(img_path):
     print('YOUR HEAD' + img_path)
+    hello();
+    # eel.say_hello_js('oh shittington')
     imgcolor = cv2.imread(img_path)
     #print('YOUR HEAD after imread' + imgcolor)
     img = cv2.cvtColor(imgcolor, cv2.COLOR_BGR2GRAY)
@@ -126,11 +142,12 @@ def detector(img_path):
         for x in range(width):
             for r in range(20,150,1):
                 if accCirc[y,x,r] >= thresholdCirc:
-                    if (not(abs(x-tempx) < 10 or abs(y-tempy) < 10)):
+                    if (not(abs(x-tempx) < 10 or abs(y-tempy) < 10) and x > r and y > r):
                         found = True
                         tempx=x
                         tempy=y
                         #cv2.circle(imgcolor, (x,y), r, color=(255,255,0), thickness = 2)
+                        print('a circle was found... apparently... at' + str(x) + ',' + str(y) + ' with radius ' + str(r))
                         crop_img = imgcolor[y-r:y+r+1, x-r:x+r+1]
                         path = './uploads'
                         cv2.imwrite(os.path.join(path, 'cropped' + str(x) + 'by' + str(y) + '.jpg'), crop_img)
@@ -139,5 +156,11 @@ def detector(img_path):
 
     if (found):
         print('Finished!')
+        return True
     else:
         print('No circular objects found in image.')
+        return False
+
+# @eel.expose
+# def send_to_js(x):
+#     print(x)
