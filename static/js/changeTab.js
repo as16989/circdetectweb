@@ -1,8 +1,11 @@
 function changeTab() {
-  var x = document.getElementById("submit");
-  if (x.style.display === "none") {
-    x.style.display = "block";
+  var choose = document.getElementById("choose");
+  var url = document.getElementById("url");
+  if (choose.style.display === "none") {
+    choose.style.display = "block";
+    url.style.display = "none";
   } else {
-    x.style.display = "none";
+    choose.style.display = "none";
+    url.style.display = "block";
   }
 }

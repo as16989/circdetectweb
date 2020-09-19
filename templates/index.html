@@ -4,94 +4,34 @@
     <title>Circle Detecting and Cropping Tool</title>
     <!-- <script type="text/javascript" src="/eel.js"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-
-
-    <script>
-        // GET is the default method, so we don't need to set it
-        fetch('/hello')
-            .then(function (response) {
-                return response.text();
-            }).then(function (text) {
-
-                // Print the greeting as text
-                console.log('GET response text:');
-                console.log(text);
-            });
-
-        // Send the same request
-        fetch('/hello')
-            .then(function (response) {
-
-                // But parse it as JSON this time
-                return response.json();
-            })
-            .then(function (json) {
-
-                // Do anything with it!
-                console.log('GET response as JSON:');
-                console.log(json);
-            })
-
-        // POST
-        fetch('/hello', {
-
-            // Specify the method
-            method: 'POST',
-
-            // A JSON payload
-            body: JSON.stringify({
-                "greeting": "Hello from the browser!"
-            })
-        }).then(function (response) {
-            return response.text();
-        }).then(function (text) {
-
-            console.log('POST response: ');
-
-            // Should be 'OK' if everything was successful
-            console.log(text);
-        });
-    </script>
-
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
   </head>
   <body>
     <h1>Circle Detecting and Cropping Tool</h1>
-    <form method="POST" action="/uploadfile" enctype="multipart/form-data">
-      <div class="choose">
-          <div id="choosefile">
-            <input type="file" name="file">
-          </div>
-          <!-- <div id="choosefile">
-            <input type="file" name="file">
-          </div> -->
-          <div id="submit">
-            <input type="submit" value="Submit">
-          </div>
+    <div class="choose">
+      <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="choose">
+        <div class="choosefile">
+          <input type="file" name="file" id="file" class="inputfile">
+          <label for="file">Choose a fileINGTON</label>
+        </div>
+        <div id="submit">
+          <input type="submit" value="Submit" class="submitbutton">
+        </div>
+      </form>
 
-      </div>
-
-    </form>
-
-    <form method="POST" action="/uploadfromurl" enctype="multipart/form-data">
-      <div class="choose">
-          <div id="choosefile">
-            <label for="url">Image URL:</label><br>
-            <input type="text" id="url" name="url"><br>
-          </div>
-          <div id="submit">
-            <input type="submit" value="Submit">
-          </div>
-
-      </div>
-
-    </form>
+      <form method="POST" action="/uploadfromurl" enctype="multipart/form-data" id="url" class="initial-hide">
+        <div class="choosefile">
+          <label for="url"></label>
+          <input type="text" id="url" name="url" placeholder="Image URL:"><br>
+        </div>
+        <input type="submit" value="Submit" class="submitbutton">
+      </form>
+    </div>
 
     <button onclick="changeTab()">Click Me</button>
 
     <script src="{{url_for('static', filename='js/changeTab.js') }}"></script>
-    <!-- <script src="{{url_for('static', filename='js/eel.js') }}"></script> -->
 
     <hr>
     <h2>What does this website do?</h2>

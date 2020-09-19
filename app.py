@@ -14,24 +14,18 @@ app.config['UPLOAD_PATH'] = 'uploads'
 
 # eel.init('templates')
 
-@app.route('/hello', methods=['GET', 'POST'])
-def hello():
-
-    # POST request
-    if request.method == 'POST':
-        print('Incoming..')
-        print(request.get_json())  # parse as JSON
-        return 'OK', 200
-
-    # GET request
-    else:
-        message = {'greeting':'OI, OSE THAT'}
-        return jsonify(message)  # serialize and use JSON headers
+progress = 'nothing yettington'
 
 @app.route('/')
 def index():
-    #files = os.listdir(app.config['UPLOAD_PATH'])
-    return render_template('index.html')
+    return render_template('index.html', progress_text = progress)
+
+@app.route('/update_progress', methods=['POST'])
+def update_progress(text):
+    progress = text
+    print('AAAAAAAAAAA' + progress)
+    return jsonify('', render_template('progress_text_model.html', progress_text = progress))
+
 
 @app.route('/uploadfile', methods=['POST'])
 def upload_files():
@@ -83,8 +77,6 @@ def download(filename):
 
 def detector(img_path):
     print('YOUR HEAD' + img_path)
-    hello();
-    # eel.say_hello_js('oh shittington')
     imgcolor = cv2.imread(img_path)
     #print('YOUR HEAD after imread' + imgcolor)
     img = cv2.cvtColor(imgcolor, cv2.COLOR_BGR2GRAY)
@@ -153,6 +145,11 @@ def detector(img_path):
                         cv2.imwrite(os.path.join(path, 'cropped' + str(x) + 'by' + str(y) + '.jpg'), crop_img)
                         circles.append((x,y,r))
                         print('Saved to ' + "cropped" + str(x) + "by" + str(y) + ".jpg")
+
+    if os.path.exists(img_path):
+        os.remove(img_path)
+    else:
+        print("The file does not exist")
 
     if (found):
         print('Finished!')
