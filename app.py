@@ -37,10 +37,12 @@ def upload_files():
             abort(400)
         filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
         uploaded_file.save(filepath)
-        if (detector(filepath)):
-            return redirect(url_for('result'))
-        else:
-            return redirect(url_for('index'))
+        # return jsonify(path=filepath)
+        # if (detector(filepath)):
+        #     return redirect(url_for('result'))
+        # else:
+        #     return redirect(url_for('index'))
+        return detector(filepath)
 
 @app.route('/uploadfromurl', methods=['POST'])
 def upload_from_url():
@@ -142,7 +144,8 @@ def detector(img_path):
                         print('a circle was found... apparently... at' + str(x) + ',' + str(y) + ' with radius ' + str(r))
                         crop_img = imgcolor[y-r:y+r+1, x-r:x+r+1]
                         path = './uploads'
-                        cv2.imwrite(os.path.join(path, 'cropped' + str(x) + 'by' + str(y) + '.jpg'), crop_img)
+                        finalpath = os.path.join(path, 'cropped' + str(x) + 'by' + str(y) + '.jpg')
+                        cv2.imwrite(finalpath, crop_img)
                         circles.append((x,y,r))
                         print('Saved to ' + "cropped" + str(x) + "by" + str(y) + ".jpg")
 
@@ -153,7 +156,7 @@ def detector(img_path):
 
     if (found):
         print('Finished!')
-        return True
+        return jsonify(path=finalpath)
     else:
         print('No circular objects found in image.')
         return False

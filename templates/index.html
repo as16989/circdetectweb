@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
+
+<script src="{{url_for('static', filename='js/changeTab.js') }}"></script>
+<script src="{{url_for('static', filename='js/enableLoader.js') }}"></script>
+
 <div class="choose">
   <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="choose">
     <div class="choosefile">
@@ -7,9 +11,13 @@
       <label for="file">Choose a fileINGTON</label>
     </div>
     <div id="submit">
-      <input type="submit" value="Submit" class="submitbutton">
+      <a href="#" id=process_upload>
+        <input type="submit" onClick="enableLoader()" value="Submit" class="submitbutton">
+      </a>
     </div>
   </form>
+
+  <img src="" alt="" id=result>
 
   <form method="POST" action="/uploadfromurl" enctype="multipart/form-data" id="url" class="initial-hide">
     <div class="choosefile">
@@ -20,12 +28,14 @@
   </form>
 </div>
 
+<script src="{{url_for('static', filename='js/imageload.js')}}"></script>
+
 <button onclick="changeTab()">Click Me</button>
 
-<script src="{{url_for('static', filename='js/changeTab.js') }}"></script>
+<div class="loader" id="loader"></div>
 
 <hr>
-<h2>What does this website do?</h2>
+<h2 id="hidetest">What does this website do?</h2>
 <p>
   This website is a tool to automatically crop an uploaded image
   to cover only circle(s) detected in the image. For example, if you
