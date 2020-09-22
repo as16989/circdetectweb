@@ -32,36 +32,39 @@ def update_progress(text):
 @app.route('/uploadfile', methods=['POST'])
 def upload_files():
     delete_existing_files();
-    uploaded_file = request.files['file']
-    filename = secure_filename(uploaded_file.filename)
-    if filename != '':
-        file_ext = os.path.splitext(filename)[1]
-        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-            abort(400)
-        filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
-        uploaded_file.save(filepath)
-        # return jsonify(path=filepath)
-        # if (detector(filepath)):
-        #     return redirect(url_for('result'))
-        # else:
-        #     return redirect(url_for('index'))
-        return detector(filepath)
+    if 'file' not in request.files:
+        uploaded_file = request.files['file']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+                abort(400)
+            filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
+            uploaded_file.save(filepath)
+            # return jsonify(path=filepath)
+            # if (detector(filepath)):
+            #     return redirect(url_for('result'))
+            # else:
+            #     return redirect(url_for('index'))
+            return detector(filepath)
+    else:
+        print('nahNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH')
+        return jsonify([])
+
 
 @app.route('/uploadfromurl', methods=['POST'])
 def upload_from_url():
-    uploaded_url = request.form['url']
-    uploaded_splitted = uploaded_url.split('/')[-1]
-    path = 'uploads/' + uploaded_splitted
-    filename = secure_filename(uploaded_splitted)
-    if filename != '':
-        file_ext = os.path.splitext(filename)[1]
-        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-            abort(400)
-        uploaded_file, headers = urllib.request.urlretrieve(uploaded_url, path)
-        if (detector(uploaded_file)):
-            return redirect(url_for('result'))
-        else:
-            return redirect(url_for('index'))
+    if 'file' not in request.files:
+        uploaded_url = request.form['url']
+        uploaded_splitted = uploaded_url.split('/')[-1]
+        path = 'uploads/' + uploaded_splitted
+        filename = secure_filename(uploaded_splitted)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+                abort(400)
+            uploaded_file, headers = urllib.request.urlretrieve(uploaded_url, path)
+            return detector(uploaded_file)
 
 @app.route('/result')
 def result():

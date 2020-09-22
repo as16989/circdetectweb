@@ -23,18 +23,13 @@ $(function() {
                 var link = $('<a/>', {
                   id:   'link' + i,
                   href: Flask.url_for("download", {"filename": resultsArray[i].slice(10)})
-                  // href: Flask.url_for("result")
                 }).appendTo($('#imagePlaceholder'));
-
-                console.log('aaaaaaa' + resultsArray[i].slice(8));
 
                 var img = $('<img/>', {
                   id:   'result' + i,
                   src:  resultsArray[i],
                   alt:  'Result ' + i
-                }).appendTo($(link)); //change this to link
-
-
+                }).appendTo($(link));
               }
             }
             else {
