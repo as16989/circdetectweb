@@ -5,7 +5,6 @@ import cv2
 import numpy as np
 import math
 import urllib.request
-# import eel
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -14,25 +13,19 @@ app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'uploads'
 
-# eel.init('templates')
-
 progress = 'nothing yettington'
 
 @app.route('/')
 def index():
     return render_template('index.html', progress_text = progress)
 
-@app.route('/update_progress', methods=['POST'])
-def update_progress(text):
-    progress = text
-    print('AAAAAAAAAAA' + progress)
-    return jsonify('', render_template('progress_text_model.html', progress_text = progress))
-
-
 @app.route('/uploadfile', methods=['POST'])
 def upload_files():
     delete_existing_files();
-    if 'file' not in request.files:
+    if 'file' in request.files:
+        print('aaaaaaaaaaaaaaaaaaaaa')
+        print(request.files)
+        print('doing the choose file ting')
         uploaded_file = request.files['file']
         filename = secure_filename(uploaded_file.filename)
         if filename != '':
@@ -41,20 +34,11 @@ def upload_files():
                 abort(400)
             filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
             uploaded_file.save(filepath)
-            # return jsonify(path=filepath)
-            # if (detector(filepath)):
-            #     return redirect(url_for('result'))
-            # else:
-            #     return redirect(url_for('index'))
             return detector(filepath)
-    else:
-        print('nahNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH')
-        return jsonify([])
 
-
-@app.route('/uploadfromurl', methods=['POST'])
-def upload_from_url():
-    if 'file' not in request.files:
+    elif 'url' in request.form:
+        delete_existing_files();
+        print('doing the URL ting')
         uploaded_url = request.form['url']
         uploaded_splitted = uploaded_url.split('/')[-1]
         path = 'uploads/' + uploaded_splitted
@@ -65,6 +49,10 @@ def upload_from_url():
                 abort(400)
             uploaded_file, headers = urllib.request.urlretrieve(uploaded_url, path)
             return detector(uploaded_file)
+
+    else:
+        print('nahNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH')
+        return jsonify([])
 
 @app.route('/result')
 def result():
@@ -169,6 +157,11 @@ def detector(img_path):
         os.remove(img_path)
     else:
         print("The file does not exist")
+    print('crank')
+    print('crank')
+    print(resultArray)
+    print('crank')
+
     return jsonify(paths=resultArray)
 
 

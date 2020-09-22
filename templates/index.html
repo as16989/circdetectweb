@@ -6,26 +6,26 @@
 <script src="{{url_for('static', filename='js/imageload.js')}}"></script>
 
 <div class="choose">
-  <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="choose">
+  <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="choose" class="uploader">
     <div class="choosefile">
       <input type="file" name="file" id="file" class="inputfile">
       <label for="file">Choose a fileINGTON</label>
     </div>
     <div id="submit">
       <a href="#" id=process_upload>
-        <input type="submit" onClick="enableLoader()" value="Submit" class="submitbutton">
+        <input type="submit" onClick="enableLoader()" value="Submit" class="submitbutton1">
       </a>
     </div>
   </form>
 
   <img src="" alt="" id=result>
 
-  <form method="POST" action="/uploadfromurl" enctype="multipart/form-data" id="url" class="initial-hide">
+  <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="url" class="initial-hide uploader">
     <div class="choosefile">
       <label for="url"></label>
       <input type="text" id="url" name="url" placeholder="Image URL:"><br>
     </div>
-    <input type="submit" onClick="enableLoader()" value="Submit" class="submitbutton">
+    <input type="submit" onClick="enableLoader()" value="Submit" class="submitbutton2">
   </form>
 </div>
 
