@@ -3,6 +3,7 @@
 
 <script src="{{url_for('static', filename='js/changeTab.js') }}"></script>
 <script src="{{url_for('static', filename='js/enableLoader.js') }}"></script>
+<script src="{{url_for('static', filename='js/imageload.js')}}"></script>
 
 <div class="choose">
   <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="choose">
@@ -28,11 +29,15 @@
   </form>
 </div>
 
-<script src="{{url_for('static', filename='js/imageload.js')}}"></script>
+
 
 <button onclick="changeTab()">Click Me</button>
 
 <div class="loader" id="loader"></div>
+
+<div id="imagePlaceholder">
+
+</div>
 
 <hr>
 <h2 id="hidetest">What does this website do?</h2>

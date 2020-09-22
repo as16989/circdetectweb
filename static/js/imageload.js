@@ -2,6 +2,7 @@ $(function() {
     $('#submit').click(function() {
         event.preventDefault();
         var form_data = new FormData($('#choose')[0]);
+        $('#imagePlaceholder').empty();
         $.ajax({
             type: 'POST',
             url: '/uploadfile',
@@ -13,11 +14,34 @@ $(function() {
             console.log(data);
             console.log(textStatus);
             console.log(jqXHR);
-            console.log(data['path'])
+            console.log(data['paths']);
             console.log('Success!');
-            // $("#resultFilename").text(data['name']);
-            // $("#resultFilesize").text(data['size']);
-            $("#result").attr('src', data['path']);
+            resultsArray = data['paths'];
+            if (resultsArray.length > 0) {
+              for (var i = 0; i < resultsArray.length; i++) {
+
+                var link = $('<a/>', {
+                  id:   'link' + i,
+                  href: Flask.url_for("download", {"filename": resultsArray[i].slice(10)})
+                  // href: Flask.url_for("result")
+                }).appendTo($('#imagePlaceholder'));
+
+                console.log('aaaaaaa' + resultsArray[i].slice(8));
+
+                var img = $('<img/>', {
+                  id:   'result' + i,
+                  src:  resultsArray[i],
+                  alt:  'Result ' + i
+                }).appendTo($(link)); //change this to link
+
+
+              }
+            }
+            else {
+              var no_img_str = $('<p/>', {
+                text: "No circles found in the input image.",
+              }).appendTo($('#imagePlaceholder'));
+            }
             $("#loader").css("display", "none");
         }).fail(function(data){
             alert('error!');

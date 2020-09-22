@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory, send_file, jsonify
+from flask_jsglue import JSGlue
 import os
 import cv2
 import numpy as np
@@ -8,6 +9,7 @@ import urllib.request
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+jsglue = JSGlue(app)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'uploads'
@@ -29,6 +31,7 @@ def update_progress(text):
 
 @app.route('/uploadfile', methods=['POST'])
 def upload_files():
+    delete_existing_files();
     uploaded_file = request.files['file']
     filename = secure_filename(uploaded_file.filename)
     if filename != '':
@@ -76,6 +79,14 @@ def download(filename):
     return send_file(os.path.join(app.config['UPLOAD_PATH'],filename), filename, as_attachment=True)
 
 #------------------------------------------------------------
+
+def delete_existing_files():
+    for filename in os.listdir(app.config['UPLOAD_PATH']):
+        filename2 = os.path.join(app.config['UPLOAD_PATH'],filename)
+        if os.path.exists(filename2):
+            os.remove(filename2)
+        else:
+            print("The file " + filename + " does not exist")
 
 def detector(img_path):
     print('YOUR HEAD' + img_path)
@@ -131,6 +142,7 @@ def detector(img_path):
     print('Cropping Image...')
 
     found = False
+    resultArray = []
 
     for y in range(height):
         for x in range(width):
@@ -146,6 +158,7 @@ def detector(img_path):
                         path = './uploads'
                         finalpath = os.path.join(path, 'cropped' + str(x) + 'by' + str(y) + '.jpg')
                         cv2.imwrite(finalpath, crop_img)
+                        resultArray.append(finalpath)
                         circles.append((x,y,r))
                         print('Saved to ' + "cropped" + str(x) + "by" + str(y) + ".jpg")
 
@@ -153,13 +166,9 @@ def detector(img_path):
         os.remove(img_path)
     else:
         print("The file does not exist")
+    return jsonify(paths=resultArray)
 
-    if (found):
-        print('Finished!')
-        return jsonify(path=finalpath)
-    else:
-        print('No circular objects found in image.')
-        return False
+
 
 # @eel.expose
 # def send_to_js(x):
