@@ -5,26 +5,25 @@ import cv2
 import numpy as np
 import math
 import urllib.request
+import requests
+import validators
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 jsglue = JSGlue(app)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+app.config['UPLOAD_HEADERS'] = ['image/png', 'image/jpg', 'image/jpeg']
 app.config['UPLOAD_PATH'] = 'uploads'
-
-progress = 'nothing yettington'
 
 @app.route('/')
 def index():
-    return render_template('index.html', progress_text = progress)
+    return render_template('index.html')
 
 @app.route('/uploadfile', methods=['POST'])
 def upload_files():
     delete_existing_files();
     if 'file' in request.files:
-        print('aaaaaaaaaaaaaaaaaaaaa')
-        print(request.files)
         print('doing the choose file ting')
         uploaded_file = request.files['file']
         filename = secure_filename(uploaded_file.filename)
@@ -40,24 +39,22 @@ def upload_files():
         delete_existing_files();
         print('doing the URL ting')
         uploaded_url = request.form['url']
+        if (not(validators.url(uploaded_url))):
+            return jsonify(paths=['nothing'])
         uploaded_splitted = uploaded_url.split('/')[-1]
         path = 'uploads/' + uploaded_splitted
+        print(path)
         filename = secure_filename(uploaded_splitted)
         if filename != '':
-            file_ext = os.path.splitext(filename)[1]
-            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                abort(400)
-            uploaded_file, headers = urllib.request.urlretrieve(uploaded_url, path)
-            return detector(uploaded_file)
+            r = requests.get(uploaded_url)
+            if r.headers['content-type'] not in app.config['UPLOAD_HEADERS']:
+                print('filetype not supported')
+                return jsonify(paths=['nothing'])
+            with open(path, 'wb') as file:
+                file.write(r.content)
+            return detector(path)
 
-    else:
-        print('nahNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH')
-        return jsonify([])
-
-@app.route('/result')
-def result():
-    files = os.listdir(app.config['UPLOAD_PATH'])
-    return render_template('result.html', files=files)
+    return jsonify(paths=['nothing'])
 
 @app.route('/uploads/<filename>')
 def upload(filename):
@@ -82,12 +79,8 @@ def delete_existing_files():
 def detector(img_path):
     print('YOUR HEAD' + img_path)
     imgcolor = cv2.imread(img_path)
-    #print('YOUR HEAD after imread' + imgcolor)
     img = cv2.cvtColor(imgcolor, cv2.COLOR_BGR2GRAY)
-    #cv2.imwrite("test.jpg", img)
     img = cv2.equalizeHist(img)
-
-    #Canny
 
     blur = cv2.blur(img,(3,3))
     edges = cv2.Canny(img,50,150)
@@ -105,6 +98,9 @@ def detector(img_path):
 
     height = np.size(img, 0)
     width = np.size(img, 1)
+
+    print('height ' + str(height) + ' width ' + str(width))
+
     distMax = round(math.sqrt(height**2 + width**2))
     thetaVals = np.arange(-90,89)
     rhoVals   = np.arange(-distMax,distMax)
@@ -112,7 +108,7 @@ def detector(img_path):
 
     accCirc = np.zeros((img.shape[0], img.shape[1], distMax))
     lower = 20
-    higher = 150
+    higher = np.minimum(width,height)
 
     print('Generating Circle Hough Space...')
 
@@ -132,18 +128,15 @@ def detector(img_path):
 
     print('Cropping Image...')
 
-    found = False
     resultArray = []
 
     for y in range(height):
         for x in range(width):
-            for r in range(20,150,1):
+            for r in range(lower,higher,1):
                 if accCirc[y,x,r] >= thresholdCirc:
                     if (not(abs(x-tempx) < 10 or abs(y-tempy) < 10) and x > r and y > r):
-                        found = True
                         tempx=x
                         tempy=y
-                        #cv2.circle(imgcolor, (x,y), r, color=(255,255,0), thickness = 2)
                         print('a circle was found... apparently... at' + str(x) + ',' + str(y) + ' with radius ' + str(r))
                         crop_img = imgcolor[y-r:y+r+1, x-r:x+r+1]
                         path = './uploads'
@@ -157,15 +150,5 @@ def detector(img_path):
         os.remove(img_path)
     else:
         print("The file does not exist")
-    print('crank')
-    print('crank')
-    print(resultArray)
-    print('crank')
 
     return jsonify(paths=resultArray)
-
-
-
-# @eel.expose
-# def send_to_js(x):
-#     print(x)

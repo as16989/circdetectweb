@@ -17,7 +17,14 @@ $(function() {
             console.log(data['paths']);
             console.log('Success!');
             resultsArray = data['paths'];
-            if (resultsArray.length > 0) {
+
+            if(resultsArray[0] == 'nothing') {
+              var no_img_str = $('<p/>', {
+                text: "Please choose a file!",
+              }).appendTo($('#imagePlaceholder'));
+            }
+
+            else if (resultsArray.length > 0) {
               for (var i = 0; i < resultsArray.length; i++) {
 
                 var link = $('<a/>', {
@@ -63,7 +70,14 @@ $(function() {
             console.log(data['paths']);
             console.log('Success!');
             resultsArray = data['paths'];
-            if (resultsArray.length > 0) {
+
+            if(resultsArray[0] == 'nothing') {
+              var no_img_str = $('<p/>', {
+                text: "Please paste a valid image URL!",
+              }).appendTo($('#imagePlaceholder'));
+            }
+
+            else if (resultsArray.length > 0) {
               for (var i = 0; i < resultsArray.length; i++) {
 
                 var link = $('<a/>', {

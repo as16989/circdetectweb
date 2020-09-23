@@ -35,9 +35,7 @@
 
 <div class="loader" id="loader"></div>
 
-<div id="imagePlaceholder">
-
-</div>
+<div id="imagePlaceholder"></div>
 
 <hr>
 <h2 id="hidetest">What does this website do?</h2>
@@ -55,10 +53,17 @@
   will then run some calculations to determine where the circles are.
   You will then be taken to a new page which shows the results of the detection
   and cropping. You can then download the cropped image(s) by clicking on them.
+  <br>
+  <br>
   Bare in mind <em><strong>this detector isn't perfect!!</strong></em> Whilst it is very good at
   finding a correct result, there may be other 'circles' that the detector finds
   that aren't in line with your desired outcome, which is why it is up to you
   to download the one that suits you best.
+  <br>
+  <br>
+  Also, to prevent the detector from finding
+  'circles' all over the image, it only looks for circles above a certain size,
+  meaning a very small input image (around 50x50) might produce undesirable results.
 </p>
 <br>
 <h2>How does it work?</h2>
