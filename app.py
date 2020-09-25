@@ -18,6 +18,7 @@ app.config['UPLOAD_PATH'] = 'uploads'
 
 @app.route('/')
 def index():
+    delete_existing_files();
     return render_template('index.html')
 
 @app.route('/uploadfile', methods=['POST'])

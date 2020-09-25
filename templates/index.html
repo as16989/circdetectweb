@@ -1,37 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
 
-<script src="{{url_for('static', filename='js/changeTab.js') }}"></script>
+<script src="{{url_for('static', filename='js/tab_file.js') }}"></script>
+<script src="{{url_for('static', filename='js/tab_url.js')}}"></script>
 <script src="{{url_for('static', filename='js/enableLoader.js') }}"></script>
 <script src="{{url_for('static', filename='js/imageload.js')}}"></script>
 
 <div class="choose">
-  <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="choose" class="uploader">
-    <div class="choosefile">
-      <input type="file" name="file" id="file" class="inputfile">
-      <label for="file">Choose a fileINGTON</label>
-    </div>
-    <div id="submit">
-      <a href="#" id=process_upload>
-        <input type="submit" onClick="enableLoader()" value="Submit" class="submitbutton1">
-      </a>
-    </div>
-  </form>
 
-  <img src="" alt="" id=result>
+  <div id="fileButton" class="fileOrUrl" onclick="tab_file()">
+    <i class="fa fa-upload" style="font-size:32px;"></i>
+    
+  </div>
+  <div id="urlButton"  class="fileOrUrl" onclick="tab_url()">
+    <i class="fa fa-link" style="font-size:32px;"></i>
 
-  <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="url" class="initial-hide uploader">
-    <div class="choosefile">
-      <label for="url"></label>
-      <input type="text" id="url" name="url" placeholder="Image URL:"><br>
-    </div>
-    <input type="submit" onClick="enableLoader()" value="Submit" class="submitbutton2">
-  </form>
+  </div>
+
+
+  <!-- <div class="test"></div> -->
+
+  <div class="form">
+
+    <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="choose" class="uploader">
+      <div class="choosefile">
+        <input type="file" name="file" id="file" class="inputfile">
+        <label for="file">Choose a fileINGTON</label>
+      </div>
+      <div class="submit">
+        <input type="submit" onClick="enableLoader()" value="Submit" id="submitbutton1">
+      </div>
+    </form>
+
+
+    <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="url" class="initial-hide uploader">
+      <div class="choosefile">
+        <label for="url"></label>
+        <input type="text" id="url" name="url" placeholder="Image URL:" class="urlform"><br>
+      </div>
+      <div class="submit">
+        <input type="submit" onClick="enableLoader()" value="Submit" id="submitbutton2" class="submit">
+      </div>
+    </form>
+  </div>
 </div>
-
-
-
-<button onclick="changeTab()">Click Me</button>
 
 <div class="loader" id="loader"></div>
 
@@ -74,4 +86,4 @@
     Hough Space to formalise how likely each point in the image is the centre of a circle
     in the image.
   </p>
-{% endblock %}
+  {% endblock %}

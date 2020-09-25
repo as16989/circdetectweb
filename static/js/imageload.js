@@ -1,5 +1,5 @@
 $(function() {
-    $('.submitbutton1').click(function() {
+    $('#submitbutton1').click(function() {
         event.preventDefault();
         var form_data = new FormData($('#choose')[0]);
         $('#imagePlaceholder').empty();
@@ -52,7 +52,7 @@ $(function() {
 });
 
 $(function() {
-    $('.submitbutton2').click(function() {
+    $('#submitbutton2').click(function() {
         event.preventDefault();
         var form_data = new FormData($('#url')[0]);
         $('#imagePlaceholder').empty();
