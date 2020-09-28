@@ -9,8 +9,8 @@
 <div class="choose">
 
   <div id="fileButton" class="fileOrUrl" onclick="tab_file()">
-    <i class="fa fa-upload" style="font-size:32px;"></i>
-    
+    <i class="fa fa-file-image-o" style="font-size:32px;"></i>
+
   </div>
   <div id="urlButton"  class="fileOrUrl" onclick="tab_url()">
     <i class="fa fa-link" style="font-size:32px;"></i>
@@ -25,10 +25,13 @@
     <form method="POST" action="/uploadfile" enctype="multipart/form-data" id="choose" class="uploader">
       <div class="choosefile">
         <input type="file" name="file" id="file" class="inputfile">
-        <label for="file">Choose a fileINGTON</label>
+        <label for="file">Choose a file...</label>
       </div>
       <div class="submit">
-        <input type="submit" onClick="enableLoader()" value="Submit" id="submitbutton1">
+        <!-- <input type="submit" onClick="enableLoader()" value="Submit" id="submitbutton1"> -->
+        <button type="submit" onClick="enableLoader()" id="submitbutton1" class="submitter">
+          <i class="fa fa-upload" style="font-size:32px;"></i>
+        </button>
       </div>
     </form>
 
@@ -39,11 +42,15 @@
         <input type="text" id="url" name="url" placeholder="Image URL:" class="urlform"><br>
       </div>
       <div class="submit">
-        <input type="submit" onClick="enableLoader()" value="Submit" id="submitbutton2" class="submit">
+        <!-- <input type="submit" onClick="enableLoader()" value="Submit" id="submitbutton2" class="submit"> -->
+        <button type="submit" onClick="enableLoader()" id="submitbutton2" class="submitter">
+          <i class="fa fa-upload" style="font-size:32px;"></i>
+        </button>
       </div>
     </form>
   </div>
 </div>
+<br>
 
 <div class="loader" id="loader"></div>
 

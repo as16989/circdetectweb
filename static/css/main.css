@@ -1,3 +1,8 @@
+* {
+ font-size: 100%;
+ font-family: Ubuntu;
+}
+
 h1 {
   text-align: center;
 }
@@ -21,14 +26,13 @@ pre { font-family: Ubuntu; font-size: 13px; font-style: normal; font-variant: no
 
 body {
   background-color: black;
-  text-align: center;
 }
 
 .headerdiv {
   padding: 70px 0;
   text-align: center;
   background: rgb(2,0,36);
-  background: linear-gradient(0deg, rgba(2,0,36,1) 17%, rgba(9,9,65,1) 47%, rgba(9,23,126,1) 66%, rgba(3,121,204,1) 86%, rgba(0,212,255,1) 100%);
+  background: linear-gradient(0deg, rgba(0,0,0,1) 17%, rgba(0,65,16,1) 47%, rgba(9,126,28,1) 66%, rgba(3,204,7,1) 86%, rgba(13,255,0,1) 100%);
 }
 
 div.choose {
@@ -45,14 +49,15 @@ div.form {
   height: 100%;
   display: inline-block;
   margin-left: 5%;
-  background-color: red;
+  /* background-color: red; */
 }
 
 div.choosefile {
-  width: 50%;
+  width: 70%;
   height: 70px;
   display: inline-block;
   background-color: blue;
+  text-align: left;
 }
 
 input.urlform {
@@ -61,7 +66,7 @@ input.urlform {
   width: 100%
 }
 
-input[type=submit] {
+button.submitter {
   display: block;
   height: 70px;
   width: 70px;
@@ -76,7 +81,7 @@ input[type=submit] {
   font-family: Ubuntu; font-size: 18px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; color: white
 }
 
-input[type=submit]:hover {
+button.submitter:hover {
   height: 70px;
   width: 70px;
   background:#00990a;
@@ -98,46 +103,34 @@ input[type=submit]:hover {
 }
 
 .inputfile + label {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   width: 100%;
-  margin-left: 1%;
+  overflow:hidden;
+  border-radius: 5px;
+  /* margin-left: 1%; */
   font-weight: 700;
   color: white;
   background-color: black;
   cursor: pointer;
+  text-align: center;
 }
 
+.inputfile:focus + label, .inputfile + label:hover {
+  background-color: green;
+  height: 100%;
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
 
-
+/* ---------------------------------- */
 
 div.submit {
   display: flex;
   float:right;
-
 }
-
-
-
-div.test {
-  display: inline-block;
-  height: 100%;
-  width: 30%;
-  margin-left: 1%;
-  background-color: red;
-  cursor: pointer;
-}
-
-.inputfile:focus + label, .inputfile + label:hover {
-  background-color: red;
-  height: 100%;
-  outline: 1px dotted #000;
-  padding: 10px 10px;
-  outline: -webkit-focus-ring-color auto 5px;
-}
-
-
-
 #fileButton {
   display: flex;
   justify-content: center;
@@ -153,7 +146,6 @@ div.test {
   background-color: white;
   color: black;
 }
-
 #urlButton {
   display: flex;
   justify-content: center;
@@ -169,13 +161,11 @@ div.test {
   background-color: black;
   color: white;
 }
-
 #fileButton:hover,#urlButton:hover {
   border: 2px solid black;
   background-color: white;
   color: black;
 }
-
 .initial-hide {
   display: none;
 }
