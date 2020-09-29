@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 jsglue = JSGlue(app)
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+#app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_HEADERS'] = ['image/png', 'image/jpg', 'image/jpeg']
 app.config['UPLOAD_PATH'] = 'uploads'
@@ -21,9 +21,14 @@ def index():
     delete_existing_files();
     return render_template('index.html')
 
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    return jsonify(paths=['toolarge'])
+
 @app.route('/uploadfile', methods=['POST'])
 def upload_files():
     delete_existing_files();
+    print('doing the choose g BEFORE')
     if 'file' in request.files:
         print('doing the choose file ting')
         uploaded_file = request.files['file']
@@ -31,7 +36,7 @@ def upload_files():
         if filename != '':
             file_ext = os.path.splitext(filename)[1]
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                abort(400)
+                return jsonify(paths=['badfile'])
             filepath = os.path.join(app.config['UPLOAD_PATH'], filename)
             uploaded_file.save(filepath)
             return detector(filepath)
@@ -80,6 +85,8 @@ def delete_existing_files():
 def detector(img_path):
     print('YOUR HEAD' + img_path)
     imgcolor = cv2.imread(img_path)
+    if (np.size(imgcolor,0) > 1024 or np.size(imgcolor,1) > 1024):
+        return jsonify(paths=['toobig'])
     img = cv2.cvtColor(imgcolor, cv2.COLOR_BGR2GRAY)
     img = cv2.equalizeHist(img)
 

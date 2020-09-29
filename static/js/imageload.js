@@ -24,7 +24,30 @@ $(function() {
               }).appendTo($('#imagePlaceholder'));
             }
 
+            else if(resultsArray[0] == 'badfile') {
+              var no_img_str = $('<p/>', {
+                text: "Please choose an image file!",
+              }).appendTo($('#imagePlaceholder'));
+            }
+
+            else if(resultsArray[0] == 'toolarge') {
+              var no_img_str = $('<p/>', {
+                text: "The chosen file is too large!",
+              }).appendTo($('#imagePlaceholder'));
+            }
+
+            else if(resultsArray[0] == 'toobig') {
+              var no_img_str = $('<p/>', {
+                text: "Please choose an image smaller than 1024x1024!",
+              }).appendTo($('#imagePlaceholder'));
+            }
+
             else if (resultsArray.length > 0) {
+
+              var click_to_dl = $('<p/>', {
+                text: "Click on the image you would like to download:",
+              }).appendTo($('#imagePlaceholder'));
+
               for (var i = 0; i < resultsArray.length; i++) {
 
                 var link = $('<a/>', {
@@ -37,6 +60,13 @@ $(function() {
                   src:  resultsArray[i],
                   alt:  'Result ' + i
                 }).appendTo($(link));
+
+                var num = $('<p/>', {
+                  text: "Result " + i,
+                }).appendTo($('#imagePlaceholder'));
+
+                var br = $('<br/><br/>').appendTo($('#imagePlaceholder'));
+
               }
             }
             else {
@@ -77,6 +107,12 @@ $(function() {
               }).appendTo($('#imagePlaceholder'));
             }
 
+            else if(resultsArray[0] == 'toobig') {
+              var no_img_str = $('<p/>', {
+                text: "Please choose an image smaller than 1024x1024!",
+              }).appendTo($('#imagePlaceholder'));
+            }
+
             else if (resultsArray.length > 0) {
               for (var i = 0; i < resultsArray.length; i++) {
 
@@ -90,6 +126,13 @@ $(function() {
                   src:  resultsArray[i],
                   alt:  'Result ' + i
                 }).appendTo($(link));
+
+                var num = $('<p/>', {
+                  text: "Result " + i,
+                }).appendTo($('#imagePlaceholder'));
+
+                var br = $('<br/>').appendTo($('#imagePlaceholder'));
+
               }
             }
             else {

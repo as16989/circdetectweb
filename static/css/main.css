@@ -39,9 +39,10 @@ div.choose {
   background-color: white;
   height: 70px;
   padding:5px 5px;
-  margin-left: 20%;
-  margin-right: 20%;
+  width: 70%;
   border-radius: 10px;
+  display: block;
+  margin: 0 auto;
 }
 
 div.form {
@@ -58,6 +59,7 @@ div.choosefile {
   display: inline-block;
   background-color: blue;
   text-align: left;
+  border-radius: 10px;
 }
 
 input.urlform {
@@ -110,6 +112,7 @@ button.submitter:hover {
   width: 100%;
   overflow:hidden;
   border-radius: 5px;
+  font-size: 3vw;
   /* margin-left: 1%; */
   font-weight: 700;
   color: white;
@@ -117,6 +120,8 @@ button.submitter:hover {
   cursor: pointer;
   text-align: center;
 }
+
+
 
 .inputfile:focus + label, .inputfile + label:hover {
   background-color: green;
@@ -138,6 +143,8 @@ div.submit {
   float: left;
   width: 10%;
   height: 100%;
+  font-size: 4vw;
+
   border-radius: 10px 0px 0px 10px;
   -webkit-box-sizing: border-box;
   cursor: pointer;
@@ -153,6 +160,8 @@ div.submit {
   float: left;
   width: 10%;
   height: 100%;
+  font-size: 4vw;
+
   border-radius: 0px 10px 10px 0px;
   -webkit-box-sizing: border-box;
   cursor: pointer;
@@ -188,4 +197,22 @@ div.submit {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@media screen and (min-width: 800px) {
+  .inputfile + label {
+    font-size: 24px;
+  }
+  #fileButton {
+    font-size: 36px;
+  }
+  #urlButton {
+    font-size: 36px;
+  }
+}
+
+#imagePlaceholder {
+  display: block;
+  text-align: center;
+  vertical-align: top;
 }
