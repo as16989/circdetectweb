@@ -11,7 +11,6 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 jsglue = JSGlue(app)
-#app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_HEADERS'] = ['image/png', 'image/jpg', 'image/jpeg']
 app.config['UPLOAD_PATH'] = 'uploads'
@@ -28,9 +27,7 @@ def request_entity_too_large(error):
 @app.route('/uploadfile', methods=['POST'])
 def upload_files():
     delete_existing_files();
-    print('doing the choose g BEFORE')
     if 'file' in request.files:
-        print('doing the choose file ting')
         uploaded_file = request.files['file']
         filename = secure_filename(uploaded_file.filename)
         if filename != '':
@@ -43,23 +40,19 @@ def upload_files():
 
     elif 'url' in request.form:
         delete_existing_files();
-        print('doing the URL ting')
         uploaded_url = request.form['url']
         if (not(validators.url(uploaded_url))):
             return jsonify(paths=['nothing'])
         uploaded_splitted = uploaded_url.split('/')[-1]
         path = 'uploads/' + uploaded_splitted
-        print(path)
         filename = secure_filename(uploaded_splitted)
         if filename != '':
             r = requests.get(uploaded_url)
             if r.headers['content-type'] not in app.config['UPLOAD_HEADERS']:
-                print('filetype not supported')
                 return jsonify(paths=['nothing'])
             with open(path, 'wb') as file:
                 file.write(r.content)
             return detector(path)
-
     return jsonify(paths=['nothing'])
 
 @app.route('/uploads/<filename>')
@@ -68,8 +61,6 @@ def upload(filename):
 
 @app.route('/downloads/<filename>')
 def download(filename):
-    print('MY HEAD')
-    print(os.path.join(app.config['UPLOAD_PATH'],filename))
     return send_file(os.path.join(app.config['UPLOAD_PATH'],filename), filename, as_attachment=True)
 
 #------------------------------------------------------------
@@ -83,7 +74,6 @@ def delete_existing_files():
             print("The file " + filename + " does not exist")
 
 def detector(img_path):
-    print('YOUR HEAD' + img_path)
     imgcolor = cv2.imread(img_path)
     if (np.size(imgcolor,0) > 1024 or np.size(imgcolor,1) > 1024):
         return jsonify(paths=['toobig'])
@@ -92,7 +82,6 @@ def detector(img_path):
 
     blur = cv2.blur(img,(3,3))
     edges = cv2.Canny(img,50,150)
-    cv2.imwrite('cannypy.jpg',edges)
 
     gxKernel = np.array([[1.0,0.0,-1.0],[2.0,0.0,-2.0],[1.0,0.0,-1.0]])
     gyKernel = np.array([[1.0,2.0,1.0],[0.0,0.0,0.0],[-1.0,-2.0,-1.0]])
@@ -102,12 +91,9 @@ def detector(img_path):
 
     graddir = cv2.phase(gy,gx)
     graddirnorm = cv2.normalize(graddir, None, 0, 360, norm_type=cv2.NORM_MINMAX, dtype=0)
-    cv2.imwrite('dirpy.jpg',graddirnorm)
 
     height = np.size(img, 0)
     width = np.size(img, 1)
-
-    print('height ' + str(height) + ' width ' + str(width))
 
     distMax = round(math.sqrt(height**2 + width**2))
     thetaVals = np.arange(-90,89)
@@ -117,8 +103,6 @@ def detector(img_path):
     accCirc = np.zeros((img.shape[0], img.shape[1], distMax))
     lower = 20
     higher = np.minimum(width,height)
-
-    print('Generating Circle Hough Space...')
 
     for y in range(height):
         for x in range(width):
@@ -134,8 +118,6 @@ def detector(img_path):
     circles = []
     tempx=tempy=0
 
-    print('Cropping Image...')
-
     resultArray = []
 
     for y in range(height):
@@ -145,14 +127,12 @@ def detector(img_path):
                     if (not(abs(x-tempx) < 10 or abs(y-tempy) < 10) and x > r and y > r):
                         tempx=x
                         tempy=y
-                        print('a circle was found... apparently... at' + str(x) + ',' + str(y) + ' with radius ' + str(r))
                         crop_img = imgcolor[y-r:y+r+1, x-r:x+r+1]
                         path = './uploads'
                         finalpath = os.path.join(path, 'cropped' + str(x) + 'by' + str(y) + '.jpg')
                         cv2.imwrite(finalpath, crop_img)
                         resultArray.append(finalpath)
                         circles.append((x,y,r))
-                        print('Saved to ' + "cropped" + str(x) + "by" + str(y) + ".jpg")
 
     if os.path.exists(img_path):
         os.remove(img_path)

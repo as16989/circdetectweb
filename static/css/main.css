@@ -50,7 +50,6 @@ div.form {
   height: 100%;
   display: inline-block;
   margin-left: 5%;
-  /* background-color: red; */
 }
 
 div.choosefile {
@@ -73,7 +72,6 @@ button.submitter {
   height: 70px;
   width: 70px;
   float: right;
-  /* width: 20%; */
   background:#00db0f;
   border:0 none;
   cursor:pointer;
@@ -121,8 +119,6 @@ button.submitter:hover {
   text-align: center;
 }
 
-
-
 .inputfile:focus + label, .inputfile + label:hover {
   background-color: green;
   height: 100%;
@@ -130,7 +126,6 @@ button.submitter:hover {
   outline: -webkit-focus-ring-color auto 5px;
 }
 
-/* ---------------------------------- */
 
 div.submit {
   display: flex;
@@ -215,4 +210,11 @@ div.submit {
   display: block;
   text-align: center;
   vertical-align: top;
+}
+
+br {
+  content: "";
+  margin: 2em;
+  display: block;
+  font-size: 26%;
 }

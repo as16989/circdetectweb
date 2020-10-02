@@ -18,6 +18,7 @@ $(function() {
             console.log('Success!');
             resultsArray = data['paths'];
 
+
             if(resultsArray[0] == 'nothing') {
               var no_img_str = $('<p/>', {
                 text: "Please choose a file!",

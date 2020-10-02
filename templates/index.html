@@ -37,7 +37,6 @@
         <input type="text" id="url" name="url" placeholder="Image URL:" class="urlform"><br>
       </div>
       <div class="submit">
-        <!-- <input type="submit" onClick="enableLoader()" value="Submit" id="submitbutton2" class="submit"> -->
         <button type="submit" onClick="enableLoader()" id="submitbutton2" class="submitter">
           <i class="fa fa-upload" style="font-size:36px;"></i>
         </button>
@@ -45,7 +44,7 @@
     </form>
   </div>
 </div>
-
+<br>
 
 <div class="loader" id="loader"></div>
 
@@ -56,7 +55,7 @@
 <script src="{{url_for('static', filename='js/filename.js')}}"></script>
 
 <hr>
-<h2 id="hidetest">What does this website do?</h2>
+<h2>What does this website do?</h2>
 <p>
   This website is a tool to automatically crop an uploaded image
   to cover only circle(s) detected in the image. For example, if you
